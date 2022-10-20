@@ -4,6 +4,8 @@ services:
 # docker is required to intiate a build
   - docker
 before_install:
+ # decrypt the file which has google cloud service account.
+  - openssl aes-256-cbc -K $encrypted_adae88804d93_key -iv $encrypted_adae88804d93_iv -in multi-k8s-365911-30ec132a7e5a.json.enc -out multi-k8s-365911-30ec132a7e5a.json -d
 # download and install google cloud sdk
   - curl https://sdk.cloud.google.com | bash > /dev/null;
   # apply some configuration to the shell environment
@@ -11,4 +13,13 @@ before_install:
   # install and update kubectl
   - gcloud components update kubectl
   # used to authenticate with our Google Cloud account. Takes json file and loads it up and informs Google Cloud.
-  - gcloud auth activate-service-account --key-file service-account.json
+  - gcloud auth activate-service-account --key-file multi-k8s-365911-30ec132a7e5a.json
+  # Travis CLI is used to encrypt the json and upload to Travis account.
+  - gcloud config set project multi-k8s-365911
+  - gcloud config set compute/zone asia-south1-a
+  - gcloud config clusters get-credentials multi-cluster
+  - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
+  - docker build -t bhushan2005/react-test -f client/Dockerfile.dev ./client
+
+script:
+  - docker run -e CI=true bhushan2005/react-test npm test 
