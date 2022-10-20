@@ -20,7 +20,7 @@ before_install:
   # Travis CLI is used to encrypt the json and upload to Travis account.
   - gcloud config set project multi-k8s-365911
   - gcloud config set compute/zone asia-south1-a
-  - gcloud config clusters get-credentials multi-cluster
+  - gcloud container clusters get-credentials multi-cluster
   - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
   - docker build -t bhushan2005/react-test -f client/Dockerfile.dev ./client
 
