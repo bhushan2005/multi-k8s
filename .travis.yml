@@ -23,3 +23,10 @@ before_install:
 
 script:
   - docker run -e CI=true bhushan2005/react-test npm test 
+
+# no built in provider for k8s. So we need to manually write a script to deploy
+deploy:
+  provider: script
+  script: bash ./deploy.sh
+  on:
+    branch: master
