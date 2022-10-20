@@ -3,6 +3,9 @@ sudo: required
 services:
 # docker is required to intiate a build
   - docker
+env:
+  global:
+    - CLOUDSDK_CORE_DISABLE_PROMPTS=1
 before_install:
  # decrypt the file which has google cloud service account.
   - openssl aes-256-cbc -K $encrypted_adae88804d93_key -iv $encrypted_adae88804d93_iv -in multi-k8s-365911-30ec132a7e5a.json.enc -out multi-k8s-365911-30ec132a7e5a.json -d
